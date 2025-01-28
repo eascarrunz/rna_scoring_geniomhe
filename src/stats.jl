@@ -1,5 +1,8 @@
 module SimpleHistograms
 
+export MyHistogram
+export update!
+
 """
 A left-closed histogram containing edges and counts.
 """

@@ -1,12 +1,21 @@
+using Pkg; Pkg.activate(".");
+
+include("util.jl")
 include("stats.jl")
 include("pdb.jl")
 include("euclid.jl")
-include("svg.jl")
+
+using ..SimpleHistograms
+# include("svg.jl")
 
 const nuc_symbols = "ACGU"
 
 # List of possible nucleotide pairings. Nucleotides must be in alphabetical order in each pair.
 const nuc_pairs = (:AA, :AC, :AG, :AU, :CC, :CG, :CU, :GG, :GU, :UU, :NN)
+
+const maxscore = 10.0
+
+outdir = "output"
 
 # Histograms
 const EDGES = 0:20
@@ -81,21 +90,29 @@ for h in nucpair_histograms[nuc_pairs[1:end-1]]
     nucpair_histograms[:NN].counts .+= h.counts
 end
 
-
 for (k, h) in pairs(nucpair_histograms)
-    hist_file = "output/histogram_$(k).svg"
-    draw_histogram(hist_file, h)
-    
-    h.counts .+= 0.0001    # Laplacian smoothing
+    file = joinpath(outdir, "counts_" * string(k) * ".txt")
+    write_scores(file, h.counts)
 end
 
 f = NamedTuple(k => v.counts / sum(v.counts) for (k, v) in pairs(nucpair_histograms))
 ubar = NamedTuple(k => -log.(v ./ f.NN) for (k, v) in pairs(f))
 
 for (k, x) in pairs(ubar)
-    draw_interaction_profile("output/interaction_profile_$(k).svg", x)
+    file = joinpath(outdir, "interaction_scores_" * string(k) * ".txt")
+    scores = min.(x, maxscore)
+    replace!(scores, NaN=>maxscore)
+    write_scores(file, scores)
+    # draw_interaction_profile("output/interaction_profile_$(k).svg", x)
 end
 
-ubar.UU
+
+# for (k, h) in pairs(nucpair_histograms)
+#     hist_file = "output/histogram_$(k).svg"
+#     draw_histogram(hist_file, h)
+    
+#     h.counts .+= 0.0001    # Laplacian smoothing
+# end
+
 # draw_interaction_profile("foo.svg", ubar.AU)
 

@@ -51,7 +51,7 @@ mapcoords(p::Point2D, ctx::PlottingContext) = Point2D(mapx(p.x, ctx), mapy(p.y, 
 
 function tick_params(data, nticks)
     ticks = range(extrema(data)..., length=nticks)
-    ndigits = ceil(Int, clamp(- log10(step(ticks)), 0, 5))
+    ndigits = ceil(Int, clamp(- log10(step(ticks)), 0, 5)) + 1
     labels = (string(round(tick, digits=ndigits)) for tick in ticks)
 
     return ticks, labels
@@ -59,9 +59,6 @@ end
 
 
 function decorate_yaxis(ctx::PlottingContext, Y, nticks=8)
-    # Yticks = range(extrema(Y)..., length=nticks)
-    # ndigits = ceil(Int, clamp(- log10(step(Yticks)), 0, 5))
-    # ticklabels = string.(round(y, digits=ndigits) for y in Yticks)
     Yticks, ticklabels = tick_params(Y, nticks)
     for (ticklabel, y) in zip(ticklabels, Yticks)
         svgy = mapy(y, ctx)
@@ -73,7 +70,7 @@ function decorate_yaxis(ctx::PlottingContext, Y, nticks=8)
     return nothing
 end
 
-function decorate_xaxis(ctx::PlottingContext, X, nticks=10)
+function decorate_xaxis(ctx::PlottingContext, X, nticks=9)
     Xticks, ticklabels = tick_params(X, nticks)
     for (ticklabel, x) in zip(ticklabels, Xticks)
         svgx = mapx(x, ctx)
@@ -99,9 +96,9 @@ function lines(X, Y)
     svgelems[:frame_border] = SVG.Rect(ctx.svgptl, ctx.svgwidth, ctx.svgheight, optattr = Dict("fill" => "#FFF", "stroke" => "#000"))
     push!(ctx.svgroot, svgelems[:fig_border])
     push!(ctx.svgroot, svgelems[:frame_border])
-    svgelems[:x0] = SVG.Line(map(y -> mapcoords(Point2D(0.0, y), ctx), ylims)..., optattr = Dict("stroke" => "#000", "stroke-dasharray" => "4 1"))
+    # svgelems[:x0] = SVG.Line(map(y -> mapcoords(Point2D(0.0, y), ctx), ylims)..., optattr = Dict("stroke" => "#000", "stroke-dasharray" => "4 1"))
     svgelems[:y0] = SVG.Line(map(x -> mapcoords(Point2D(x, 0.0), ctx), xlims)..., optattr = Dict("stroke" => "#000", "stroke-dasharray" => "4 1"))
-    push!(ctx.svgroot, svgelems[:x0])
+    # push!(ctx.svgroot, svgelems[:x0])
     push!(ctx.svgroot, svgelems[:y0])
     svgpoints = mapcoords.(Point2D.(X, Y), Ref(ctx))
     svgelems[:series] = SVG.PolyLine(svgpoints, optattr = Dict("stroke" => "#000", "fill" => "rgba(0,0,0,0)"))
@@ -117,17 +114,3 @@ plot(io::IO, ctx::PlottingContext) = draw(io::IO, ctx.svgroot)
 
 end
 
-using .SVGPlot
-
-X = collect(0:10)
-append!(X, X)
-Y = collect(0:10)
-append!(Y, .-Y)
-
-X, Y = randn(10), randn(10)
-sort!(X)
-
-ctx = SVGPlot.lines(X, Y)
-open("foo.svg", "w") do io
-    plot(io, ctx)
-end

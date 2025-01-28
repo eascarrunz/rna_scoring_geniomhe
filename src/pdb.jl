@@ -26,15 +26,6 @@ AtomInfo = @NamedTuple begin
     Z::Float64
 end
 
-function beginswith(text::String, pattern::String)
-    length(text) < length(pattern) && return false
-
-    for (i, c) in enumerate(pattern)
-        text[i] != c && return false
-    end
-
-    return true
-end
 
 
 function extract_pdb_field(line::String, field::Symbol)
