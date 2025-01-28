@@ -22,7 +22,7 @@ const EDGES = 0:20
 const nucpair_histograms = NamedTuple(x => MyHistogram(EDGES) for x in nuc_pairs)
 
 # Input
-pdbfiles = readdir("data/ribozymes", join=true)
+pdbfiles = readdir("data/native", join=true)
 size_threshold = 2_500    # Maximum file size, in kB
 global skipped_files = 0
 
