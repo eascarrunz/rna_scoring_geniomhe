@@ -1,4 +1,4 @@
-include("data_frame.jl")
+include("infoholder.jl")
 include("util.jl")
 include("stats.jl")
 include("pdb.jl")

@@ -1,19 +1,19 @@
 module SimpleHistograms
 
-export MyHistogram
+export SimpleHistogram
 export update!
 
 """
 A left-closed histogram containing edges and counts.
 """
-struct MyHistogram{R<:AbstractRange}
+struct SimpleHistogram{R<:AbstractRange}
     edges::R
     counts::Vector{Int}
 
-    MyHistogram(r::R) where R <: AbstractRange = new{R}(r, zeros(Int, length(r) - 1))
+    SimpleHistogram(r::R) where R <: AbstractRange = new{R}(r, zeros(Int, length(r) - 1))
 
-    function MyHistogram(x, edges::R) where R <: AbstractRange
-        h = MyHistogram(edges)
+    function SimpleHistogram(x, edges::R) where R <: AbstractRange
+        h = SimpleHistogram(edges)
         update!(h, x)
 
         return h
@@ -21,8 +21,8 @@ struct MyHistogram{R<:AbstractRange}
 end
 
 
-Base.length(h::MyHistogram) = length(h.counts)
-Base.show(io::IO, h::MyHistogram) = print(io, "MyHistogram with $(length(h)) bins and $(sum(h.counts)) observations")
+Base.length(h::SimpleHistogram) = length(h.counts)
+Base.show(io::IO, h::SimpleHistogram) = print(io, "MyHistogram with $(length(h)) bins and $(sum(h.counts)) observations")
 
 
 """
@@ -32,7 +32,7 @@ Add observation(s) (scalar or collection) to a histogram.
 
 Observations outside the histogram range are ignored.
 """
-function update!(h::MyHistogram, x)
+function update!(h::SimpleHistogram, x)
     first_edge = first(h.edges)
     last_edge = last(h.edges)
     edge_step = step(h.edges)

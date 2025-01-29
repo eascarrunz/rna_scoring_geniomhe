@@ -50,10 +50,10 @@ Records can be optionally filtered by atom name (string or vector of strings). N
 The following record fields are returned as columns in the data frame:
 `:AtomSerialNumber`, `:AtomName`, `:ResidueName`, `:ChainID`, `:ResidueSeqNumber`, `:X`, `:Y`, `:Z`
 """
-function read_atoms(io::IO; name="")::DataFrame
+function read_atoms(io::IO; name="")::InfoHolder
     atom_name_tag = isempty(name) ? 0 : name
 
-    df = DataFrame(
+    df = InfoHolder(
         AtomSerialNumber = Int[],
         AtomName = String[],
         ResidueName = String[],

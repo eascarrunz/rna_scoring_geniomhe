@@ -1,5 +1,5 @@
 include("util.jl")
-include("data_frame.jl")
+include("infoholder.jl")
 include("euclid.jl")
 include("pdb.jl")
 

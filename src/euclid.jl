@@ -6,7 +6,7 @@ euclid(a, b) = √(sum((a .- b).^2))
 """
 Compute the matrix of Euclidean distances among atoms separated by at least `k` positions in a chain.
 """
-function euclid_atoms(df::DataFrame, k)
+function euclid_atoms(df::InfoHolder, k)
     nb_atom = size(df, 1)
 
     d = zeros(nb_atom, nb_atom)
