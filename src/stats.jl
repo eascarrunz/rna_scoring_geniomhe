@@ -39,7 +39,7 @@ function update!(h::MyHistogram, x)
 
     for val in x
         i = floor(Int, (val - first_edge) / edge_step)    # Index of the bin, minus one
-        in_range = first_edge ≤ val ≤ last_edge
+        in_range = first_edge ≤ val < last_edge
 
         #=
         val is in range: add 1 to the corresponding bin `i` + 1

@@ -8,11 +8,6 @@ include("euclid.jl")
 using ..SimpleHistograms
 # include("svg.jl")
 
-const nuc_symbols = "ACGU"
-
-# List of possible nucleotide pairings. Nucleotides must be in alphabetical order in each pair.
-const nuc_pairs = (:AA, :AC, :AG, :AU, :CC, :CG, :CU, :GG, :GU, :UU, :NN)
-
 const maxscore = 10.0
 
 outdir = "output"
@@ -99,7 +94,7 @@ f = NamedTuple(k => v.counts / sum(v.counts) for (k, v) in pairs(nucpair_histogr
 ubar = NamedTuple(k => -log.(v ./ f.NN) for (k, v) in pairs(f))
 
 for (k, x) in pairs(ubar)
-    file = joinpath(outdir, "interaction_scores_" * string(k) * ".txt")
+    file = joinpath(outdir, "interaction_profile_" * string(k) * ".txt")
     scores = min.(x, maxscore)
     replace!(scores, NaN=>maxscore)
     write_scores(file, scores)
