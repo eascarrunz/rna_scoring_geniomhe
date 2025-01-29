@@ -37,34 +37,6 @@ function interpolate_score(profile, val)
     return s
 end
 
-"""
-    inter_atomic_distance_map(f, df, k)
-"""
-function inter_atomic_distance_map(f::Function, df, k)
-    coords_i = zeros(3)
-    coords_j = zeros(3)
-    nb = length(df.ResidueName)
-
-    for i in eachindex(df.ResidueName)
-        nuc_i = df.ResidueName[i]
-        coords_i .= df.X[i], df.Y[i], df.Z[i]
-        chain_i = df.ChainID[i]
-
-        for j in (i + (k + 1)):nb
-            chain_j = df.ChainID[j]
-            chain_i == chain_j || break
-
-            nuc_j = df.ResidueName[j]
-            coords_j .= df.X[j], df.Y[j], df.Z[j]
-
-            d = euclid(coords_i, coords_j)
-            f(nuc_i, nuc_j, d)
-        end
-    end
-
-    return nothing
-end
-
 function make_score_computer(s::Ref, profile_dict, edges)
     return function compute_score(nuc1, nuc2, d)
         nuc_pair = Symbol(*(extrema((nuc1, nuc2))...))
