@@ -1,7 +1,10 @@
 include("util.jl")
 include("infoholder.jl")
 include("euclid.jl")
+include("stats.jl")
 include("pdb.jl")
+include("svg.jl")
+include("plot_module.jl")
 
 k = 3
 EDGES = 0:20
@@ -54,13 +57,21 @@ function main()
         Dict(x => read_scores(Float64, joinpath(indir, "interaction_profile_" * string(x) * ".txt")) for x in nuc_pairs)
     
     println(stdout, "File\tLength\tScore")
+    scores = zeros(length(interaction_profiles))
+
     for file in ARGS
-        df = read_atoms(file; name="C3'")
+        df = read_atoms(file; name="C3\'")
         check_sequence(df, quiet = true) || continue
         s = Ref(0.0)
         compute_score = make_score_computer(s, interaction_profiles, EDGES)
         inter_atomic_distance_map(compute_score, df, k)
         println(stdout, file, '\t', length(df), '\t', s[])
+        push!(scores, s[])
+    end
+
+    ctx = barplot(scores)
+    open("output/rna_scores.svg", "w") do io
+        plot(io, ctx)
     end
 
     return 0
