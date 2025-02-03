@@ -4,14 +4,10 @@ include("stats.jl")
 include("pdb.jl")
 include("euclid.jl")
 
-using ..SimpleHistograms
-
 const maxscore = 10.0
 k = 3
 
 outdir = "output"
-
-
 
 # Input
 pdbfiles = readdir("data/native", join=true)
@@ -30,7 +26,7 @@ end
 function main()
     # Histograms
     EDGES = 0:20
-    nucpair_histograms = NamedTuple(x => MyHistogram(EDGES) for x in nuc_pairs)
+    nucpair_histograms = NamedTuple(x => SimpleHistogram(EDGES) for x in nuc_pairs)
 
     update_distance_histogram! = make_distance_histogram_updater(nucpair_histograms)
     for pdbfile in pdbfiles

@@ -1,8 +1,3 @@
-module SimpleHistograms
-
-export SimpleHistogram
-export update!
-
 """
 A left-closed histogram containing edges and counts.
 """
@@ -50,7 +45,3 @@ function update!(h::SimpleHistogram, x)
 
     return h
 end
-   
-end
-
-
