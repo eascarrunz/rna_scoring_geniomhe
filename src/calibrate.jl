@@ -11,7 +11,8 @@ outdir = "output"
 
 # Input
 pdbfiles = readdir("data/native", join=true)
-size_threshold = 2_500    # Maximum file size, in kB
+# Size threshold used during development, to speed up calculations
+size_threshold = 1_000_000    # Maximum file size, in kB
 global skipped_files = 0
 
 function make_distance_histogram_updater(histogram_dict)

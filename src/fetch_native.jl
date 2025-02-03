@@ -37,6 +37,10 @@ make_pdb_path(handle, dir) = joinpath(dir, handle * ".pdb")
 function main()
     isdir(outdir) || mkpath(outdir)
 
+    if ! isempty(ARGS)
+        handle_list = only(ARGS)
+    end
+
     handles = read_handle_list(handle_list)
     
     unzip_taks = Vector{Task}()
