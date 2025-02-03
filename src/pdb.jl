@@ -34,7 +34,7 @@ _atom_name_check(text::AbstractString, tag::String) = text == tag
 
 function read_atoms(file::String; name = "")
     df = open(file) do io
-        read_atoms((io); name = name)
+        read_atoms(io; name = name)
     end
 
     return df
@@ -77,7 +77,9 @@ function read_atoms(io::IO; name="")::InfoHolder
             return df
         end
         
+        length(line) < length(PDB_FIELD_DEFINITIONS.RecordType.Range) && break
         record_type = extract_pdb_field(line, :RecordType)
+        record_type == "TER" && break
         if record_type == "ATOM" || record_type == "HETATM"
             atom_name_in_line = extract_pdb_field(line, :AtomName)
             _atom_name_check(atom_name_in_line, atom_name_tag) || continue
@@ -90,20 +92,6 @@ function read_atoms(io::IO; name="")::InfoHolder
             push!(df[:X], extract_pdb_field(line, :X))
             push!(df[:Y], extract_pdb_field(line, :Y))
             push!(df[:Z], extract_pdb_field(line, :Z))
-
-            # push!(df, line_data)
-            # line_data = (
-            #     AtomSerialNumber =  extract_pdb_field(line, :AtomSerialNumber),
-            #     AtomName =          atom_name_in_line,
-            #     ResidueName =       extract_pdb_field(line, :ResidueName),
-            #     ChainID =           extract_pdb_field(line, :ChainID),
-            #     ResidueSeqNumber =  extract_pdb_field(line, :ResidueSeqNumber),
-            #     X =                 extract_pdb_field(line, :X),
-            #     Y =                 extract_pdb_field(line, :Y),
-            #     Z =                 extract_pdb_field(line, :Z)
-            # )
-
-            # push!(df, line_data)
         end
     end
 
