@@ -157,5 +157,47 @@ function plot_histogram(h::SimpleHistogram)
 end
 
 
+function barplot(vals)
+    ylims = (0.0, maximum(vals))
+    xlims = (0.0, 1.0)
+    ctx = PlottingContext(
+        SVGRoot(PLOTFRAME_DEFAULTS.width, PLOTFRAME_DEFAULTS.height),
+        PLOTFRAME_DEFAULTS.ptl,
+        PLOTFRAME_DEFAULTS.pbr,
+        xlims,
+        ylims
+    )
+    svgelems = Dict{Symbol,SVGElement}()
+
+    # Frame
+    svgelems[:fig_border] = SVGRect(Point2D(0, 0), ctx.svgroot.width, ctx.svgroot.height, optattr = Dict("fill" => "#FFF", "stroke" => "#000"))
+    push!(ctx.svgroot, svgelems[:fig_border])
+
+    y0 = mapy(0.0, ctx)
+    xstep = 1.0 / (1 + length(vals))
+    bw = mapx(2 * (xstep / 5), ctx) - mapx(xstep / 4, ctx)
+    x = first(xlims)
+    for (i, val) in enumerate(vals)
+        x += xstep
+        bar_anchor = mapcoords(Point2D(x, val), ctx)
+        bar_rect = SVGRect(bar_anchor, bw, y0 - bar_anchor.y, optattr = Dict("fill" => "#000", "stroke" => "#FFF"))
+        push!(ctx.svgroot, bar_rect)
+        label_anchor = Point2D(bar_anchor.x, y0 + 10)
+        push!(ctx.svgroot,
+            SVGText(
+                label_anchor, string(i), optattr=Dict("text-anchor"=>"middle", "dominant-baseline"=>"hanging", "font-size"=>"12")
+                )
+            )
+    end
+
+    svgelems[:frame_border] = SVGRect(ctx.svgptl, ctx.svgwidth, ctx.svgheight, optattr = Dict("fill" => "rgba(1, 1, 1, 0)", "stroke" => "#000"))
+    push!(ctx.svgroot, svgelems[:frame_border])
+
+    decorate_yaxis(ctx, ylims)
+
+    return ctx
+end
+
+
 plot(io::IO, ctx::PlottingContext) = draw(io::IO, ctx.svgroot)
 
