@@ -1,7 +1,7 @@
 include("util.jl")
-include("stats.jl")
+include("histograms.jl")
 include("svg.jl")
-include("plot_module.jl")
+include("svg_plotting.jl")
 
 indir = "output"
 outdir = "output"

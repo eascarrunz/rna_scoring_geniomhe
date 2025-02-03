@@ -1,10 +1,10 @@
 include("util.jl")
 include("infoholder.jl")
 include("euclid.jl")
-include("stats.jl")
+include("histograms.jl")
 include("pdb.jl")
 include("svg.jl")
-include("plot_module.jl")
+include("svg_plotting.jl")
 
 k = 3
 EDGES = 0:20

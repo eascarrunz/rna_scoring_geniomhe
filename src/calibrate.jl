@@ -1,6 +1,6 @@
 include("infoholder.jl")
 include("util.jl")
-include("stats.jl")
+include("histograms.jl")
 include("pdb.jl")
 include("euclid.jl")
 
