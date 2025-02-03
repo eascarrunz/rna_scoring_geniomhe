@@ -36,8 +36,9 @@ function draw(io::IO, root::SVGRoot)
         bytes += write(io, XML_INDENT)
         bytes += draw(io, c)
     end
+    bytes += write(io, "</svg>\n")
 
-    return bytes + write(io, "</svg>\n")
+    return bytes
 end
 
 
@@ -139,4 +140,4 @@ draw(io::IO, e::SVGText) =
         common_1p(io, e) +
         write(io, ' ') +
         common_class_attr(io, e) +
-        write(io, ">$(e.text)</text>")
+        write(io, ">$(e.text)</text>\n")
