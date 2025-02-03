@@ -69,11 +69,6 @@ function main()
         push!(scores, s[])
     end
 
-    ctx = barplot(scores)
-    open("output/rna_scores.svg", "w") do io
-        plot(io, ctx)
-    end
-
     return 0
 end
 
