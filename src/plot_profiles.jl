@@ -13,8 +13,6 @@ infiles = readdir(indir, join=true)
 count_files = filter(x -> startswith(x, count_prefix) && endswith(x, ".txt"), infiles)
 score_files = filter(x -> startswith(x, score_prefix) && endswith(x, ".txt"), infiles)
 
-println(score_files)
-
 for infile in score_files
     scores = read_scores(Float64, infile)
     pushfirst!(scores, first(scores))
