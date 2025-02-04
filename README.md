@@ -1,9 +1,6 @@
----
-title: Project\: Objective function for the RNA folding problem
-author: Eduardo Ascarrunz
-date: 2025-01-29
----
 # Project: Objective function for the RNA folding problem
+
+Eduardo Ascarrunz
 
 This repository contains scripts for computing scores for RNA conformation models based on pseudo Gibb's free energy profiles from empirical data.
 
