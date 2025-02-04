@@ -1,5 +1,5 @@
 ---
-title: Project: Objective function for the RNA folding problem
+title: Project\: Objective function for the RNA folding problem
 author: Eduardo Ascarrunz
 date: 2025-01-29
 ---
