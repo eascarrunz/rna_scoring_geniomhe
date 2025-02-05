@@ -20,8 +20,6 @@ function make_distance_histogram_updater(histogram_dict)
         histogram_name = Symbol(*(extrema((nuc1, nuc2))...))
         update!(histogram_dict[histogram_name], d)
     end
-
-    return nothing
 end
 
 function main()
